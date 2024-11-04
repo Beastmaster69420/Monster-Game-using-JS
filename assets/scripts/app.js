@@ -13,16 +13,32 @@ const LOG_MONSTER_ATK = 'MONSTER_ATTACK';
 const LOG_PLAYER_HEAL = 'PLAYER_HEAL';
 const LOG_GAME_OVER = 'GAME_OVER';
 
+function getMaxLife() {
+  const enteredNumber = prompt('Enter max life', 100);
+  let parsedValue = +enteredNumber;
 
-const enteredNumber = prompt('Enter max life', 100);
-let chosenMaxLife = +enteredNumber;
+  if (isNaN(parsedValue) || parsedValue <= 0) {
+    throw {message:'Invalid max life'};
+  }
 
-if (isNaN(chosenMaxLife) || chosenMaxLife <= 0) {
-  chosenMaxLife = 100;
+  return parsedValue;
 }
+
+let chosenMaxLife;
+
+try{
+  chosenMaxLife = getMaxLife();
+}catch(error){
+  console.log(error);
+  chosenMaxLife = 100;
+  alert('Invalid input detected, default value used.');
+}
+
 let currentMonsterHealth = chosenMaxLife;
 let currentPlayerHealth = chosenMaxLife;
 let hasExtraLife = true;
+let lastLoggedEntry;
+
 
 function reset() {
   currentMonsterHealth = chosenMaxLife;
@@ -183,7 +199,7 @@ function onClickhealPlayer() {
 }
 
 function onClickPrintLog() {
-  for(let i=10;i>0;i--){
+  for(let i=2;i>0;i--){
     console.log('--------------------------------');
   }
   // for(i=0;i<battleLog.length;i++){
@@ -191,11 +207,15 @@ function onClickPrintLog() {
   // }
   let i=0;
   for(const log of battleLog) {
-    console.log(`#${i}`);
-    for(const key in log){
-      console.log(`${key} ===> ${log[key]}`);
+    if(!lastLoggedEntry && lastLoggedEntry !==0 || lastLoggedEntry < i){
+      console.log(`#${i}`);
+      for(const key in log){
+        console.log(`${key} ===> ${log[key]}`);
+      }
+      lastLoggedEntry = i;
+      break;
     }
-    i++
+    i++;
   }
 }
 attackBtn.addEventListener('click', attackHandler);
