@@ -191,9 +191,11 @@ function onClickPrintLog() {
   // }
   let i=0;
   for(const log of battleLog) {
-    console.log(log);
-    console.log(i);
-    i++;
+    console.log(`#${i}`);
+    for(const key in log){
+      console.log(`${key} ===> ${log[key]}`);
+    }
+    i++
   }
 }
 attackBtn.addEventListener('click', attackHandler);
